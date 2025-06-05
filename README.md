@@ -17,6 +17,10 @@ A modern, lightweight chat assistant built with Next.js, TypeScript, and Tailwin
 
 ---
 
+![image](https://github.com/user-attachments/assets/2c9359a2-b576-4e21-b2ce-f8011d2469b9)
+
+
+
 ## Tech Stack
 
 - **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS  
