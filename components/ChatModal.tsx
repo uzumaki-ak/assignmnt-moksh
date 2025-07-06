@@ -22,8 +22,10 @@ const ChatModal: FC<ChatModalProps> = ({ onClose }) => {
   const [isLoadingMessages, setIsLoadingMessages] = useState(true);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  //modl ref Usually used to manage focus, detect clicks outside the modal (for closing), or scroll behavior.
+
   useEffect(() => {
-    // Fetch existing messages from MongoDB when component mounts
+    // Fetch existing messages or component mounts (loads) this runs the fetchMessages function to get any saved chat messages from the database
     fetchMessages();
 
     // Close modal when clicking outside
@@ -140,6 +142,9 @@ const ChatModal: FC<ChatModalProps> = ({ onClose }) => {
       setLoading(false);
     }
   };
+
+  //When a prebuilt question button is clicked, it just calls handleSendMessage with that question. thus
+  // Reuses sending logic for both user-typed and prebuilt questions.
 
   const handlePrebuiltQuestion = (question: string) => {
     handleSendMessage(question);
@@ -277,7 +282,11 @@ const ChatModal: FC<ChatModalProps> = ({ onClose }) => {
 
         {/* Input */}
         <div className="p-4 border-t bg-white">
-          <MessageInput onSendMessage={handleSendMessage} loading={loading} />
+          <MessageInput
+            onSendMessage={handleSendMessage}
+            loading={loading}
+            disabled={messages.length >= 10}
+          />
         </div>
       </div>
     </div>

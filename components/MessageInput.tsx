@@ -6,14 +6,15 @@ import { Loader2, Send } from "lucide-react";
 interface MessageInputProps {
   onSendMessage: (message: string) => void;
   loading: boolean;
+  disabled: boolean; // 🔸 NEW: to control input/button state externally
 }
 
-const MessageInput: FC<MessageInputProps> = ({ onSendMessage, loading }) => {
+const MessageInput: FC<MessageInputProps> = ({ onSendMessage, loading, disabled }) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (message.trim() && !loading) {
+    if (message.trim() && !loading && !disabled) {
       onSendMessage(message);
       setMessage("");
     }
@@ -26,16 +27,20 @@ const MessageInput: FC<MessageInputProps> = ({ onSendMessage, loading }) => {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message..."
+          placeholder={
+            disabled
+              ? "Message limit reached"
+              : "Type your message..."
+          }
           className="w-full border-2 border-gray-200 rounded-full px-4 py-3 pr-12 focus:outline-none focus:border-purple-500 transition-colors"
-          disabled={loading}
+          disabled={loading || disabled}
         />
       </div>
       <button
         type="submit"
-        disabled={loading || !message.trim()}
+        disabled={loading || !message.trim() || disabled}
         className={`rounded-full p-3 transition-all duration-200 ${
-          loading || !message.trim()
+          loading || !message.trim() || disabled
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
             : "bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 shadow-lg hover:shadow-xl"
         } focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2`}

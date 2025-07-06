@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
 import { generateGeminiResponse } from "@/lib/gemini"
+import { error } from "console"
 
 export async function GET() {
   try {
@@ -97,6 +98,12 @@ export async function DELETE() {
   try {
     const client = await clientPromise
     const db = client.db("chatApp")
+
+    const getMessages = await db.collection("messages").countDocuments();
+
+    if (getMessages >=10) {
+return NextResponse.json({error: "limit recahed"}, {status: 400})
+    }
 
     // Deleting all messages when starting new chat
     await db.collection("messages").deleteMany({})
